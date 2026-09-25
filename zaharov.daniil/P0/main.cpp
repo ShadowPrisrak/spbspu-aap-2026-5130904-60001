@@ -1,7 +1,8 @@
 #include <iostream>
 
-int main() {
+int main()
+{
 
- std::cout << "zaharov.danill\n";
+ std::cout << "zaharov.daniil\n";
 
 }
