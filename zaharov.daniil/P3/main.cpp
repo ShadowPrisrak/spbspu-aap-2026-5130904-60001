@@ -28,9 +28,12 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
   return true;
 }
 
-void process()
+void process(int *data, int rows, int cols)
 {
   //todo
+  (void)data;
+  (void)rows;
+  (void)cols;
 }
 
 void writeMatrix(std::ofstream &out, int *data, int rows, int cols)
@@ -79,6 +82,18 @@ int main(int argc, char *argv[])
     std:cerr << "Error: cannot open output file\n";
     return 2;
   }
+
+  int data[MAX_ELEMENTS];
+  int rows = 0;
+  int cols = 0;
+
+  if (!readMatrix(in, data, rows, cols)) {
+    std::cerr << "Error: cannot read matrix\n";
+    return 2;
+  }
+
+  process(data, rows, cols);
+  writeMatrix(out, data, rows, cols);
 
   return 0;
 }
