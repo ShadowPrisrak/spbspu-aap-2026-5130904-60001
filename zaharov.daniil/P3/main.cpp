@@ -33,9 +33,19 @@ void process()
   //todo
 }
 
-void writeMatrix()
+void writeMatrix(std::ofstream &out, int *data, int rows, int cols)
 {
-  //todo
+  out << rows << '' << cols << '\n';
+
+  for (int i = 0; i<rows; ++i) {
+    for (int j = 0; j<cols; ++j) {
+      if (j>0) {
+        out << '';
+      }
+      out << data[i * cols + j];
+    }
+    out << '\n';
+  }
 }
 
 int main(int argc, char *argv[])
