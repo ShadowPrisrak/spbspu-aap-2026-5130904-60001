@@ -69,7 +69,6 @@ int main(int argc, char *argv[])
   }
 
   int num = static_cast<int>(parsed);
-  (void)num; //todo
 
   std::ifstream in(argv[2]);
   if (!in) {
@@ -83,17 +82,44 @@ int main(int argc, char *argv[])
     return 2;
   }
 
-  int data[MAX_ELEMENTS];
   int rows = 0;
   int cols = 0;
 
-  if (!readMatrix(in, data, rows, cols)) {
-    std::cerr << "Error: cannot read matrix\n";
-    return 2;
-  }
+  if (num == 1) {
+    int data[MAX_ELEMENTS];
 
-  process(data, rows, cols);
-  writeMatrix(out, data, rows, cols);
+    if (!readMatrix(in, data, rows, cols)) {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+
+    process(data, rows, cols);
+    writeMatrix(out, data, rows, cols);
+  } else {
+    if (!(in >> rows >> cols)) {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+
+    if (rows <= 0 || cols <= 0 || rows * cols > MAX_ELEMENTS) {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+
+    int *data = new int[rows * cols];
+    for (int i = 0; i<total; ++i) {
+      if (!(in >> data[i])) {
+        delete[] data;
+        std::cerr << "Error: cannot read matrix\n";
+        return 2;
+      }
+    }
+
+    process(data, rows, cols);
+    writeMatrix(out, data, rows, cols);
+
+    delete[] data;
+  }
 
   return 0;
 }
