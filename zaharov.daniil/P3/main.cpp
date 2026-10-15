@@ -53,8 +53,6 @@ void writeMatrix(std::ofstream &out, int *data, int rows, int cols)
 
 int main(int argc, char *argv[])
 {
-  (void)argv; //todo
-
   if (argc != 4) {
     std:cerr << "Error: expected 3 arguments\n";
     return 1;
