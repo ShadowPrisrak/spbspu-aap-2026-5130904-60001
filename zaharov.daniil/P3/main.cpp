@@ -2,10 +2,30 @@
 #include <cstdlib>
 #include <fstream>
 
-bool readMatrix()
+const int MAX_ELEMENTS = 10000;
+
+bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
 {
-  //todo
-  return false;
+  if (!(in >> rows >> cols)) {
+    return false;
+  }
+
+  if (rows <= 0 || cols <= 0) {
+    return false;
+  }
+
+  if (rows * cols > MAX_ELEMENTS) {
+    return false;
+  }
+
+  int total = rows * cols;
+  for (int i = 0; i<total; ++i) {
+    if (!(in >> data[i])) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 void process()
