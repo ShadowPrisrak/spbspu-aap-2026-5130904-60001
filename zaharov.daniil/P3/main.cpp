@@ -1,0 +1,142 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
+
+const int maxElements = 10000;
+
+bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
+{
+  if (!(in >> rows >> cols))
+  {
+    return false;
+  }
+
+  if (rows <= 0 || cols <= 0)
+  {
+    return false;
+  }
+
+  if (rows * cols > maxElements)
+  {
+    return false;
+  }
+
+  const int total = rows * cols;
+  for (int i = 0; i < total; ++i)
+  {
+    if (!(in >> data[i]))
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+void process(const int *data, int rows, int cols)
+{
+  (void)data;
+  (void)rows;
+  (void)cols;
+}
+
+void writeMatrix(std::ofstream &out, const int *data, int rows, int cols)
+{
+  out << rows << ' ' << cols << '\n';
+
+  for (int i = 0; i < rows; ++i)
+  {
+    for (int j = 0; j < cols; ++j)
+    {
+      if (j > 0)
+      {
+        out << ' ';
+      }
+      out << data[i * cols + j];
+    }
+    out << '\n';
+  }
+}
+
+int main(int argc, char *argv[])
+{
+  if (argc != 4)
+  {
+    std::cerr << "Error: expected 3 arguments\n";
+    return 1;
+  }
+
+  char *end = nullptr;
+  const long parsed = std::strtol(argv[1], &end, 10);
+
+  if (*end != '\0' || (parsed != 1 && parsed != 2))
+  {
+    std::cerr << "Error: first argument must be 1 or 2\n";
+    return 1;
+  }
+
+  const int num = static_cast< int >(parsed);
+
+  std::ifstream in(argv[2]);
+  if (!in)
+  {
+    std::cerr << "Error: cannot open input file\n";
+    return 2;
+  }
+
+  std::ofstream out(argv[3]);
+  if (!out)
+  {
+    std::cerr << "Error: cannot open output file\n";
+    return 2;
+  }
+
+  int rows = 0;
+  int cols = 0;
+
+  if (num == 1)
+  {
+    int data[maxElements];
+
+    if (!readMatrix(in, data, rows, cols))
+    {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+
+    process(data, rows, cols);
+    writeMatrix(out, data, rows, cols);
+  }
+  else
+  {
+    if (!(in >> rows >> cols))
+    {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+
+    if (rows <= 0 || cols <= 0 || rows * cols > maxElements)
+    {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+
+    int *const data = new int[rows * cols];
+    for (int i = 0; i < rows * cols; ++i)
+    {
+      if (!(in >> data[i]))
+      {
+        delete[] data;
+        std::cerr << "Error: cannot read matrix\n";
+        return 2;
+      }
+    }
+
+    process(data, rows, cols);
+    writeMatrix(out, data, rows, cols);
+
+    delete[] data;
+  }
+
+  return 0;
+}
