@@ -21,7 +21,7 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
     return false;
   }
 
-  int total = rows * cols;
+  const int total = rows * cols;
   for (int i = 0; i < total; ++i)
   {
     if (!(in >> data[i]))
@@ -33,14 +33,14 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
   return true;
 }
 
-void process(int *data, int rows, int cols)
+void process(const int *data, int rows, int cols)
 {
   (void)data;
   (void)rows;
   (void)cols;
 }
 
-void writeMatrix(std::ofstream &out, int *data, int rows, int cols)
+void writeMatrix(std::ofstream &out, const int *data, int rows, int cols)
 {
   out << rows << ' ' << cols << '\n';
 
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
   }
 
   char *end = nullptr;
-  long parsed = std::strtol(argv[1], &end, 10);
+  const long parsed = std::strtol(argv[1], &end, 10);
 
   if (*end != '\0' || (parsed != 1 && parsed != 2))
   {
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  int num = static_cast< int >(parsed);
+  const int num = static_cast< int >(parsed);
 
   std::ifstream in(argv[2]);
   if (!in)
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
       return 2;
     }
 
-    int *data = new int[rows * cols];
+    int *const data = new int[rows * cols];
     for (int i = 0; i < rows * cols; ++i)
     {
       if (!(in >> data[i]))
