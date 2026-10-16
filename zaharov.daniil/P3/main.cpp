@@ -19,7 +19,7 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
   }
 
   int total = rows * cols;
-  for (int i = 0; i<total; ++i) {
+  for (int i = 0; i < total; ++i) {
     if (!(in >> data[i])) {
       return false;
     }
@@ -30,7 +30,6 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
 
 void process(int *data, int rows, int cols)
 {
-  //todo
   (void)data;
   (void)rows;
   (void)cols;
@@ -40,9 +39,9 @@ void writeMatrix(std::ofstream &out, int *data, int rows, int cols)
 {
   out << rows << '' << cols << '\n';
 
-  for (int i = 0; i<rows; ++i) {
-    for (int j = 0; j<cols; ++j) {
-      if (j>0) {
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      if (j > 0) {
         out << '';
       }
       out << data[i * cols + j];
@@ -54,19 +53,19 @@ void writeMatrix(std::ofstream &out, int *data, int rows, int cols)
 int main(int argc, char *argv[])
 {
   if (argc != 4) {
-    std:cerr << "Error: expected 3 arguments\n";
+    std::cerr << "Error: expected 3 arguments\n";
     return 1;
   }
 
   char *end = nullptr;
   long parsed = std::strtol(argv[1], &end, 10);
 
-  if (*end != '\0' || (parsed != 1 && parsed !=2)) {
-    std:cerr << "Error: first argument must be 1 or 2\n";
+  if (*end != '\0' || (parsed != 1 && parsed != 2)) {
+    std::cerr << "Error: first argument must be 1 or 2\n";
     return 1;
   }
 
-  int num = static_cast<int>(parsed);
+  int num = static_cast< int >(parsed);
 
   std::ifstream in(argv[2]);
   if (!in) {
@@ -76,7 +75,7 @@ int main(int argc, char *argv[])
 
   std::ofstream out(argv[3]);
   if (!out) {
-    std:cerr << "Error: cannot open output file\n";
+    std::cerr << "Error: cannot open output file\n";
     return 2;
   }
 
@@ -105,7 +104,7 @@ int main(int argc, char *argv[])
     }
 
     int *data = new int[rows * cols];
-    for (int i = 0; i<total; ++i) {
+    for (int i = 0; i < total; ++i) {
       if (!(in >> data[i])) {
         delete[] data;
         std::cerr << "Error: cannot read matrix\n";
@@ -121,5 +120,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-
-
