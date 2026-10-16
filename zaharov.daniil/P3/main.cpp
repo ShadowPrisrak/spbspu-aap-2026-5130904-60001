@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <fstream>
 
-const int MAX_ELEMENTS = 10000;
+const int maxElements = 10000;
 
 bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
 {
@@ -14,7 +14,7 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
     return false;
   }
 
-  if (rows * cols > MAX_ELEMENTS) {
+  if (rows * cols > maxElements) {
     return false;
   }
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
   int cols = 0;
 
   if (num == 1) {
-    int data[MAX_ELEMENTS];
+    int data[maxElements];
 
     if (!readMatrix(in, data, rows, cols)) {
       std::cerr << "Error: cannot read matrix\n";
