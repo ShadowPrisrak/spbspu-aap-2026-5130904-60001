@@ -33,11 +33,85 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
   return true;
 }
 
-void process(const int *data, int rows, int cols)
+int findBestColumn(const int *data, int rows, int cols)
 {
-  (void)data;
-  (void)rows;
-  (void)cols;
+  int max_series = 0;
+  int best_col = 0;
+
+  for (int j = 0; j < cols; ++j)
+  {
+    int cur_series = 1;
+    int col_max_series = 1;
+
+    for (int i = 1; i < rows; ++i)
+    {
+      if (data[i * cols + j] == data[(i-1) * cols + j])
+      {
+        ++cur_series;
+      }
+      else
+      {
+        cur_series = 1;
+      }
+
+      if (cur_series > col_max_series)
+      {
+        col_max_series = cur_series;
+      }
+    }
+
+    if (col_max_series > max_series)
+    {
+      max_series = col_max_series;
+      best_col = j + 1;
+    }
+  }
+  return best_col;
+}
+
+void process(int *data, int rows, int cols)
+{
+  int top = 0;
+  int bottom = rows - 1;
+  int left = 0;
+  int right = cols - 1;
+  int step = 1;
+
+  while (top <= bottom && left <= right)
+  {
+    for (int i = bottom; i >= top; --i)
+    {
+      data[i * cols + left] -= step++;
+    }
+    ++left;
+
+    if (top <= bottom)
+    {
+      for (int j = left; j <= right; ++j)
+      {
+        data[top * cols + j] -= step++;
+      }
+      ++top;
+    }
+
+    if (left <= right)
+    {
+      for (int i = top; i <= bottom; ++i)
+      {
+        data[i * cols + right] -= step++;
+      }
+      --right;
+    }
+
+    if (top <= bottom)
+    {
+      for (int j = right; j >= left; --j)
+      {
+        data[bottom * cols + j] -= step++;
+      }
+      --bottom;
+    }
+  }
 }
 
 void writeMatrix(std::ofstream &out, const int *data, int rows, int cols)
@@ -97,6 +171,7 @@ int main(int argc, char *argv[])
   if (num == 1)
   {
     int data[maxElements];
+    int original[maxElements];
 
     if (!readMatrix(in, data, rows, cols))
     {
@@ -104,8 +179,17 @@ int main(int argc, char *argv[])
       return 2;
     }
 
+    const int total = rows * cols;
+    for (int i = 0; i < total; ++i)
+    {
+      original[i] = data[i];
+    }
+
     process(data, rows, cols);
     writeMatrix(out, data, rows, cols);
+
+    const int best_col = findBestColumn(original, rows, cols);
+    out << best_col << '\n'
   }
   else
   {
@@ -122,20 +206,29 @@ int main(int argc, char *argv[])
     }
 
     int *const data = new int[rows * cols];
-    for (int i = 0; i < rows * cols; ++i)
+    int *const original = new int[rows * cols];
+    const int total = rows * cols;
+
+    for (int i = 0; i < total; ++i)
     {
       if (!(in >> data[i]))
       {
         delete[] data;
+        delete[] original;
         std::cerr << "Error: cannot read matrix\n";
         return 2;
       }
+      original[i] = data[i]
     }
 
     process(data, rows, cols);
     writeMatrix(out, data, rows, cols);
 
+    const int best_col = findBestColumn(original, rows, cols);
+    out << best_col << '\n';
+
     delete[] data;
+    delete[] original;
   }
 
   return 0;
