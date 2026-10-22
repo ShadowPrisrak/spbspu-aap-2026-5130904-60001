@@ -11,7 +11,7 @@ bool readMatrix(std::ifstream &in, int *data, int &rows, int &cols)
     return false;
   }
 
-  if (rows <= 0 || cols <= 0)
+  if (rows < 0 || cols < 0)
   {
     return false;
   }
@@ -45,7 +45,7 @@ int findBestColumn(const int *data, int rows, int cols)
 
     for (int i = 1; i < rows; ++i)
     {
-      if (data[i * cols + j] == data[(i-1) * cols + j])
+      if (data[i * cols + j] == data[(i - 1) * cols + j])
       {
         ++cur_series;
       }
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
     writeMatrix(out, data, rows, cols);
 
     const int best_col = findBestColumn(original, rows, cols);
-    out << best_col << '\n'
+    out << best_col << '\n';
   }
   else
   {
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
       return 2;
     }
 
-    if (rows <= 0 || cols <= 0 || rows * cols > maxElements)
+    if (rows < 0 || cols < 0 || rows * cols > maxElements)
     {
       std::cerr << "Error: cannot read matrix\n";
       return 2;
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
         std::cerr << "Error: cannot read matrix\n";
         return 2;
       }
-      original[i] = data[i]
+      original[i] = data[i];
     }
 
     process(data, rows, cols);
