@@ -1,6 +1,6 @@
 #include <iostream>
-#include <cstdlib>
 #include <fstream>
+#include <cstdlib>
 #include <cstddef>
 #include <memory>
 
@@ -15,12 +15,10 @@ namespace zaharov
     {
       return in;
     }
-
     if (rows > maxElements || cols > maxElements || rows * cols > maxElements)
     {
       return in;
     }
-
     const size_t total = rows * cols;
     for (size_t i = 0; i < total; ++i)
     {
@@ -29,7 +27,6 @@ namespace zaharov
         return in;
       }
     }
-
     return in;
   }
 
@@ -37,12 +34,10 @@ namespace zaharov
   {
     size_t max_series = 0;
     size_t best_col = 0;
-
     for (size_t j = 0; j < cols; ++j)
     {
       size_t cur_series = 1;
       size_t col_max_series = 1;
-
       for (size_t i = 1; i < rows; ++i)
       {
         if (data[i * cols + j] == data[(i - 1) * cols + j])
@@ -53,13 +48,11 @@ namespace zaharov
         {
           cur_series = 1;
         }
-
         if (cur_series > col_max_series)
         {
           col_max_series = cur_series;
         }
       }
-
       if (col_max_series > max_series)
       {
         max_series = col_max_series;
@@ -75,7 +68,6 @@ namespace zaharov
     {
       return;
     }
-
     int top = 0;
     int bottom = static_cast< int >(rows) - 1;
     int left = 0;
@@ -89,7 +81,6 @@ namespace zaharov
         data[i * static_cast< int >(cols) + left] -= step++;
       }
       ++left;
-
       if (top <= bottom)
       {
         for (int j = left; j <= right; ++j)
@@ -98,7 +89,6 @@ namespace zaharov
         }
         ++top;
       }
-
       if (left <= right)
       {
         for (int i = top; i <= bottom; ++i)
@@ -107,7 +97,6 @@ namespace zaharov
         }
         --right;
       }
-
       if (top <= bottom)
       {
         for (int j = right; j >= left; --j)
@@ -122,152 +111,116 @@ namespace zaharov
   std::ostream &writeMatrix(std::ofstream &out, const int *data, size_t rows, size_t cols)
   {
     out << rows << ' ' << cols << '\n';
-
     for (size_t i = 0; i < rows; ++i)
     {
       for (size_t j = 0; j < cols; ++j)
       {
-        out << data[i * cols + j];
-        if (j + 1 < cols)
+        if (j > 0)
         {
           out << ' ';
         }
+        out << data[i * cols + j];
       }
       out << '\n';
     }
     return out;
   }
 
-  bool parseArgs(int argc, char *argv[], size_t &num, const char *&input_file, const char *&output_file)
-  {
-    if (argc != 4)
-    {
-      return false;
-    }
-
-    char *end = nullptr;
-    const long parsed = std::strtol(argv[1], &end, 10);
-
-    if (*end != '\0' || (parsed != 1 && parsed != 2))
-    {
-      return false;
-    }
-
-    num = static_cast< size_t >(parsed);
-    input_file = argv[2];
-    output_file = argv[3];
-    return true;
-  }
-
-  bool processMatrix(size_t num, std::ifstream &in, std::ofstream &out)
-  {
-    size_t rows = 0;
-    size_t cols = 0;
-    int *data = nullptr;
-    int *original = nullptr;
-    int stack_data[maxElements];
-    int stack_original[maxElements];
-
-    if (num == 1)
-    {
-      data = stack_data;
-      original = stack_original;
-      if (!readMatrix(in, data, rows, cols))
-      {
-        return false;
-      }
-    }
-    else
-    {
-      if (!(in >> rows >> cols))
-      {
-        return false;
-      }
-
-      if (rows > maxElements || cols > maxElements || rows * cols > maxElements)
-      {
-        return false;
-      }
-
-      data = new int[rows * cols];
-      original = new int[rows * cols];
-
-      const size_t total = rows * cols;
-      for (size_t i = 0; i < total; ++i)
-      {
-        if (!(in >> data[i]))
-        {
-          delete[] data;
-          delete[] original;
-          return false;
-        }
-      }
-    }
-
-    const size_t total = rows * cols;
-    if (total > 0)
-    {
-      for (size_t i = 0; i < total; ++i)
-      {
-        original[i] = data[i];
-      }
-
-      applySpiralDecrease(data, rows, cols);
-      writeMatrix(out, data, rows, cols);
-      out << findBestColumn(original, rows, cols) << '\n';
-    }
-    else
-    {
-      out << rows << ' ' << cols << '\n';
-      out << 0 << '\n';
-    }
-
-    if (num == 2)
-    {
-      delete[] data;
-      delete[] original;
-    }
-
-    return true;
-  }
-
-  int run(int argc, char *argv[])
-  {
-    size_t num = 0;
-    const char *input_file = nullptr;
-    const char *output_file = nullptr;
-
-    if (!parseArgs(argc, argv, num, input_file, output_file))
-    {
-      std::cerr << "Error: expected 3 arguments\n";
-      return 1;
-    }
-
-    std::ifstream in(input_file);
-    if (!in)
-    {
-      std::cerr << "Error: cannot open input file\n";
-      return 2;
-    }
-
-    std::ofstream out(output_file);
-    if (!out)
-    {
-      std::cerr << "Error: cannot open output file\n";
-      return 2;
-    }
-
-    if (!processMatrix(num, in, out))
-    {
-      std::cerr << "Error: cannot read matrix\n";
-      return 2;
-    }
-
-    return 0;
-  }
 }
 
 int main(int argc, char *argv[])
 {
-  return zaharov::run(argc, argv);
+  if (argc != 4)
+  {
+    std::cerr << "Error: expected 3 arguments\n";
+    return 1;
+  }
+
+  char *end = nullptr;
+  long parsed = 0;
+  parsed = std::strtol(argv[1], std::addressof(end), 10);
+
+  if (*end != '\0' || (parsed != 1 && parsed != 2))
+  {
+    std::cerr << "Error: first argument must be 1 or 2\n";
+    return 1;
+  }
+
+  const size_t num = static_cast< size_t >(parsed);
+
+  std::ifstream in(argv[2]);
+  if (!in)
+  {
+    std::cerr << "Error: cannot open input file\n";
+    return 2;
+  }
+
+  std::ofstream out(argv[3]);
+  if (!out)
+  {
+    std::cerr << "Error: cannot open output file\n";
+    return 2;
+  }
+
+  size_t rows = 0;
+  size_t cols = 0;
+  int *data = nullptr;
+  int *original = nullptr;
+  int stack_data[zaharov::maxElements];
+  int stack_original[zaharov::maxElements];
+
+  if (num == 1)
+  {
+    data = stack_data;
+    original = stack_original;
+    if (!zaharov::readMatrix(in, data, rows, cols))
+    {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+  }
+  else
+  {
+    if (!(in >> rows >> cols))
+    {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+    if (rows > zaharov::maxElements || cols > zaharov::maxElements || rows * cols > zaharov::maxElements)
+    {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
+    data = new int[rows * cols];
+    original = new int[rows * cols];
+    const size_t total = rows * cols;
+    for (size_t i = 0; i < total; ++i)
+    {
+      if (!(in >> data[i]))
+      {
+        delete[] data;
+        delete[] original;
+        std::cerr << "Error: cannot read matrix\n";
+        return 2;
+      }
+    }
+  }
+
+  const size_t total = rows * cols;
+  for (size_t i = 0; i < total; ++i)
+  {
+    original[i] = data[i];
+  }
+
+  zaharov::applySpiralDecrease(data, rows, cols);
+  zaharov::writeMatrix(out, data, rows, cols);
+  out << zaharov::findBestColumn(original, rows, cols) << '\n';
+
+  if (num == 2)
+  {
+    delete[] data;
+    delete[] original;
+  }
+
+  return 0;
 }
