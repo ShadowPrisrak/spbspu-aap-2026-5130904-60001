@@ -2,6 +2,7 @@
 #define RUBBER_HPP
 
 #include "shape.hpp"
+#include "base-types.hpp"
 
 namespace zaharov
 {

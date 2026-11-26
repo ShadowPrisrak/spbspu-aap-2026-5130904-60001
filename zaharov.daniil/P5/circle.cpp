@@ -3,6 +3,8 @@
 
 namespace zaharov
 {
+  const double diameter_factor = 2.0;
+
   Circle::Circle(double radius, p_t pos):
     radius_(radius),
     pos_(pos)
@@ -21,7 +23,7 @@ namespace zaharov
 
   rec_t Circle::getFrameRect() const
   {
-    return {radius_ * 2.0, radius_ * 2.0, pos_};
+    return {radius_ * diameter_factor, radius_ * diameter_factor, pos_};
   }
 
   void Circle::move(p_t p)

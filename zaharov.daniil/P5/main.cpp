@@ -4,6 +4,12 @@
 #include "circle.hpp"
 #include "rubber.hpp"
 
+const double rect_w = 4.0;
+const double rect_h = 2.0;
+const double circ_r = 3.0;
+const double rub_sm = 1.0;
+const double rub_bg = 3.0;
+
 void printShape(const zaharov::Shape* shape, const char* name)
 {
   const zaharov::rec_t frame = shape->getFrameRect();
@@ -18,9 +24,9 @@ int main()
 
   try
   {
-    shapes[0] = new zaharov::Rectangle(4.0, 2.0, {0.0, 0.0});
-    shapes[1] = new zaharov::Circle(3.0, {5.0, 5.0});
-    shapes[2] = new zaharov::Rubber(1.0, 3.0, {10.0, 10.0}, {11.0, 11.0});
+    shapes[0] = new zaharov::Rectangle(rect_w, rect_h, {0.0, 0.0});
+    shapes[1] = new zaharov::Circle(circ_r, {5.0, 5.0});
+    shapes[2] = new zaharov::Rubber(rub_sm, rub_bg, {10.0, 10.0}, {11.0, 11.0});
   }
   catch (const std::exception& e)
   {

@@ -4,6 +4,8 @@
 
 namespace zaharov
 {
+  const double half = 2.0;
+
   Rubber::Rubber(double small_radius, double big_radius, p_t pos, p_t big_pos):
     small_radius_(small_radius),
     big_radius_(big_radius),
@@ -44,7 +46,7 @@ namespace zaharov
 
     const double width = max_x - min_x;
     const double height = max_y - min_y;
-    const p_t center = {(min_x + max_x) / 2.0, (min_y + max_y) / 2.0};
+    const p_t center = {(min_x + max_x) / half, (min_y + max_y) / half};
 
     return {width, height, center};
   }
