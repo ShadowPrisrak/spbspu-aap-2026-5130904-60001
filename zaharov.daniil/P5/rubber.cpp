@@ -15,8 +15,8 @@ namespace zaharov
       throw std::invalid_argument("Radius must be positive");
     }
 
-    const double dist_sqr = (big_pos_.x - pos_.x) * (big_pos_.x - pos_.x) +
-                            (big_pos_.y - pos_.y) * (big_pos_.y - pos_.y);
+    const double dist_sqr
+        = (big_pos_.x - pos_.x) * (big_pos_.x - pos_.x) + (big_pos_.y - pos_.y) * (big_pos_.y - pos_.y);
     const double r_diff = big_radius_ - small_radius_;
     if (r_diff <= 0 || dist_sqr >= r_diff * r_diff)
     {
@@ -44,7 +44,7 @@ namespace zaharov
 
     const double width = max_x - min_x;
     const double height = max_y - min_y;
-    const p_t center = {(min-x + max_x) / 2.0, (min_y + max_y) / 2.0};
+    const p_t center = {(min_x + max_x) / 2.0, (min_y + max_y) / 2.0};
 
     return {width, height, center};
   }

@@ -6,10 +6,9 @@
 
 void printShape(const zaharov::Shape* shape, const char* name)
 {
-  const zaharov::rectangle_t frame = shape->getFrameRect();
-  std::cout << name << ": area = " << shape->getArea()
-            << ", frame = (" << frame.pos.x << ", " << frame.pos.y
-            << ", " << frame.width << ", " << frame.height << ")\n";
+  const zaharov::rec_t frame = shape->getFrameRect();
+  std::cout << name << ": area = " << shape->getArea() << ", frame = (" << frame.pos.x << ", " << frame.pos.y << ", "
+            << frame.width << ", " << frame.height << ")\n";
 }
 
 int main()
@@ -44,22 +43,28 @@ int main()
   if (!(std::cin >> px >> py >> k))
   {
     std::cerr << "Error: invalid input\n";
-    for (size_t i = 0; i < count; ++i) delete shapes[i];
+    for (size_t i = 0; i < count; ++i)
+    {
+      delete shapes[i];
+    }
     return 1;
   }
 
   if (k <= 0)
   {
     std::cerr << "Error: scale factor must be positive\n";
-    for (size_t i = 0; i < count; ++i) delete shapes[i];
+    for (size_t i = 0; i < count; ++i)
+    {
+      delete shapes[i];
+    }
     return 1;
   }
 
-  const zaharov::point_t center = {px, py};
+  const zaharov::p_t center = {px, py};
 
   for (size_t i = 0; i < count; ++i)
   {
-    const zaharov::rectangle_t frame = shapes[i]->getFrameRect();
+    const zaharov::rec_t frame = shapes[i]->getFrameRect();
     const double dx = frame.pos.x - center.x;
     const double dy = frame.pos.y - center.y;
 

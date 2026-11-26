@@ -5,7 +5,7 @@
 
 namespace zaharov
 {
-  class Rectangle : public Shape
+  class Rectangle: public Shape
   {
   public:
     Rectangle(double width, double height, p_t pos);

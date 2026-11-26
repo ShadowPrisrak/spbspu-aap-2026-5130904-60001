@@ -5,7 +5,7 @@
 
 namespace zaharov
 {
-  class Rubber : public Shape
+  class Rubber: public Shape
   {
   public:
     Rubber(double small_radius, double big_radius, p_t pos, p_t big_pos);

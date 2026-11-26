@@ -5,14 +5,14 @@
 
 namespace zaharov
 {
-  class Circle : public Shape
+  class Circle: public Shape
   {
   public:
     Circle(double radius, p_t pos);
 
     virtual double getArea() const override;
     virtual rec_t getFrameRect() const override;
-    virtual void move(point_t p) override;
+    virtual void move(p_t p) override;
     virtual void move(double dx, double dy) override;
     virtual void scale(double k) override;
 

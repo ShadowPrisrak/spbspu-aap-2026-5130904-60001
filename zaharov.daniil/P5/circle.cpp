@@ -19,7 +19,7 @@ namespace zaharov
     return pi * radius_ * radius_;
   }
 
-  rectangle_t Circle::getFrameRect() const
+  rec_t Circle::getFrameRect() const
   {
     return {radius_ * 2.0, radius_ * 2.0, pos_};
   }
